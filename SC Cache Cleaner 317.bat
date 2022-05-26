@@ -103,6 +103,18 @@ IF EXIST "%cd%\sc-alpha*" (
 	echo ALL - [93mAppLocal Shaders folder has not been rebuilt yet, skipping.[0m
 )
 
+::Ask the user for driver level shader cache removal.
+echo Would you also like to clean NVIDIA driver level shader cache?
+echo [91mWARNING^^! This operation will delete all NVIDIA driver level shader cache, including other games on your system.[0m
+SET /P AREYOUSURE=(Y/[N])
+IF /I "%AREYOUSURE%" NEQ "Y" GOTO RUN
+cd /D "%localappdata%\NVIDIA"
+IF EXIST "%cd%\DXCache" (
+	(for /d %%G in ("%cd%\DXCache") do rd /s /q "%%~G") && ECHO Clearing Driver Level Shaders Cache: [92mSUCCESS![0m
+) else (
+	echo ALL - [93mDriver Level Shaders folder has not been rebuilt yet, skipping.[0m
+)
+
 ::Script destination if folder deletion is skipped.
 :RUN
 
